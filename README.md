@@ -168,12 +168,7 @@ The repository contains `frontend/vercel.json` for SPA route rewriting. It has n
 
 - **Backend exits before listening:** Check that `MONGODB_URI`, `JWT_SECRET`, and `CLIENT_URL` are set in `backend/.env`. Review the backend's startup message without sharing secret values.
 - **MongoDB auth or network errors:** Verify the Atlas database username/password encoded in the URI, database user permissions, IP/network access, and the URI's database name. `/api/health` reports `503` if MongoDB is unavailable.
-- **Socket connection fails:** Check `VITE_SOCKET_URL`, that the backend is listening, and that `CLIENT_URL` contains the frontend origin. Socket handshake authentication requires a valid JWT.
-- **CORS errors:** Set `CLIENT_URL` to the exact origin (scheme and host, no path); multiple origins are comma-separated. Development permits localhost loopback HTTP origins; production does not.
-- **Production calls localhost:** Vite variables are compiled into the bundle. Set the Render URL in Vercel's build environment and redeploy.
-- **Room join denied:** Confirm the code has six letters/digits, the user is signed in, and the caller is the owner or a member for a private room.
-- **Reconnect does not recover:** The socket reconnect behavior is an intentionally seeded contribution issue (WB-06); see the catalogue. The current seeded client currently does not retry after a transport disconnect.
-- **Vercel build fails:** Configure bot
+
 
 ## Contributing and license
 
