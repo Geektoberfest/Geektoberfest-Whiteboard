@@ -174,7 +174,7 @@ The repository contains `frontend/vercel.json` for SPA route rewriting. It has n
 - **Room join denied:** Confirm the code has six letters/digits, the user is signed in, and the caller is the owner or a member for a private room.
 - **Reconnect does not recover:** The socket reconnect behavior is an intentionally seeded contribution issue (WB-06); see the catalogue. The current seeded client currently does not retry after a transport disconnect.
 - **Vercel build fails:** Configure both required Vite variables and confirm `frontend` is the root and `npm run build` is used.
-- **Render build or boot fails:** Use `backend` as the root, `npm ci` and `npm start`, configure required backend environment variables, and confirm MongoDB is reachable from the service.
+- **Render build or b
 
 ## Contributing and license
 
