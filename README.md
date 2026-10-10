@@ -173,8 +173,7 @@ The repository contains `frontend/vercel.json` for SPA route rewriting. It has n
 - **Production calls localhost:** Vite variables are compiled into the bundle. Set the Render URL in Vercel's build environment and redeploy.
 - **Room join denied:** Confirm the code has six letters/digits, the user is signed in, and the caller is the owner or a member for a private room.
 - **Reconnect does not recover:** The socket reconnect behavior is an intentionally seeded contribution issue (WB-06); see the catalogue. The current seeded client currently does not retry after a transport disconnect.
-- **Vercel build fails:** Configure both required Vite variables and confirm `frontend` is the root and `npm run build` is used.
-- **Render build or b
+- **Vercel build fails:** Configure bot
 
 ## Contributing and license
 
