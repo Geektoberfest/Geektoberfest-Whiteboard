@@ -164,10 +164,6 @@ The repository contains `frontend/vercel.json` for SPA route rewriting. It has n
 
 **MongoDB Atlas:** Create a database user with only the privileges needed for the application, allow the Render service's outbound network according to Atlas network-access policy, and set `MONGODB_URI` in Render. Never put credentials in this repository. Check `/api/health` for database connectivity, then sign in from the deployed frontend, join the same test room in two sessions, and verify drawing, presence, and room isolation.
 
-## Troubleshooting
-
-- **Backend exits before listening:** Check that `MONGODB_URI`, `JWT_SECRET`, and `CLIENT_URL` are set in `backend/.env`. Review the backend's startup message without sharing secret values.
-- **MongoDB auth or network errors:** Verify the Atlas database username/password encoded in the URI, database user permissions, IP/network access, and the URI's database name. `/api/health` reports `503` if MongoDB is unavailable.
 
 
 ## Contributing and license
