@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe6ff;
+  --color-brand-200: #bed2ff;
+  --color-brand-300: #91b4ff;
+  --color-brand-400: #5c8cfc;
+  --color-brand-500: #366bf6;
+  --color-brand-600: #1f4ceb;
+  --color-brand-700: #1a3ad8;
+  --color-brand-800: #1c33af;
+  --color-brand-900: #1d318a;
+  --color-brand-950: #152057;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-brand-200);
+}
+
+/* The whiteboard is a full height surface, so its background should not scroll. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
