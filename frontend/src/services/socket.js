@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { createSocketOptions } from './socketOptions.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
@@ -16,7 +17,7 @@ export function getSocket(token) {
   }
 
   if (!socket) {
-    socket = io(SOCKET_URL, { auth: { token }, reconnection: false });
+    socket = io(SOCKET_URL, createSocketOptions(token));
   }
 
   return socket;
