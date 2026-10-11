@@ -1,4 +1,5 @@
 import { canResize, fontSizeFor, getBounds } from './geometry.js';
+import { STICKY_COLORS } from '../constants/tools.js';
 
 export const RESIZE_HANDLES = ['nw', 'ne', 'se', 'sw'];
 const HANDLE_SIZE = 8;
