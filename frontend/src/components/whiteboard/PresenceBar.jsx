@@ -1,3 +1,5 @@
+import { overflowCount } from '../../utils/presenceOverflow.js';
+
 function initials(name) {
   return name
     .split(/\s+/)
@@ -8,6 +10,8 @@ function initials(name) {
 
 export default function PresenceBar({ participants }) {
   if (participants.length === 0) return null;
+
+  const overflow = overflowCount(participants);
 
   return (
     <div className="flex items-center" aria-label={`${participants.length} people in this room`}>
@@ -24,8 +28,8 @@ export default function PresenceBar({ participants }) {
           </li>
         ))}
       </ul>
-      {participants.length > 6 ? (
-        <span className="ml-2 text-xs text-slate-500">+{participants.length - 5} more</span>
+      {overflow > 0 ? (
+        <span className="ml-2 text-xs text-slate-500">+{overflowCount(participants)} more</span>
       ) : null}
     </div>
   );
