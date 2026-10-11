@@ -49,6 +49,14 @@ describe('sanitizeElement', () => {
     assert.equal(sanitizeElement({ id: 'a', type: 'pen', points: [] }), null);
   });
 
+  it('preserves the points of a long pen stroke (WB-01)', () => {
+    const points = Array.from({ length: 2000 }, (_, i) => ({ x: i, y: i }));
+    const element = sanitizeElement({ id: 'long-pen', type: 'pen', points });
+
+    assert.equal(element.points.length, 2000);
+    assert.deepEqual(element.points.at(-1), { x: 1999, y: 1999 });
+  });
+
   it('rejects a non numeric coordinate', () => {
     assert.equal(sanitizeElement({ id: 'a', type: 'rectangle', x: 'left', y: 0 }), null);
   });

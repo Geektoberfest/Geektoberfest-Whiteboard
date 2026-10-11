@@ -5,7 +5,13 @@ const TYPES = new Set(['pen', 'line', 'arrow', 'rectangle', 'circle', 'text', 's
 const BOUND_TYPES = new Set(['rectangle', 'circle', 'text', 'sticky']);
 
 const MAX_COORDINATE = 100000;
-const MAX_POINTS = 500;
+// A completed freehand pen stroke arrives as a single element, so this must be
+// large enough to hold a long continuous stroke without dropping its later
+// points (WB-01). The cap stays finite so a client still cannot push an
+// unbounded array: 10000 points is far beyond any realistic hand-drawn stroke
+// (seconds of drawing at screen refresh rates) while keeping element payloads
+// well within socket and document size limits.
+const MAX_POINTS = 10000;
 const MAX_TEXT_LENGTH = 2000;
 const MAX_STROKE_WIDTH = 80;
 const MAX_ID_LENGTH = 64;
