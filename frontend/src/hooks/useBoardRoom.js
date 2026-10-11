@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { disconnectSocket, getSocket } from '../services/socket.js';
 import { elementSignature, upsertElement as upsertIntoArray } from '../utils/elements.js';
 
-const HISTORY_LIMIT = 1;
 const ACTIVITY_TIMEOUT = 4000;
 
 export function useBoardRoom(token, roomCode) {
@@ -39,7 +38,7 @@ export function useBoardRoom(token, roomCode) {
   const commit = useCallback(
     (next) => {
       const history = historyRef.current;
-      history.past = [...history.past, elementsRef.current].slice(-HISTORY_LIMIT);
+      history.past = [...history.past, elementsRef.current];
       history.future = [];
       setCanUndo(true);
       setCanRedo(false);
@@ -77,7 +76,7 @@ export function useBoardRoom(token, roomCode) {
     emitDiff(current, previous);
 
     history.past = history.past.slice(0, -1);
-    history.future = [current, ...history.future].slice(0, HISTORY_LIMIT);
+    history.future = [current, ...history.future];
     setCanUndo(history.past.length > 0);
     setCanRedo(true);
   }, [applyElements, emitDiff]);
@@ -92,7 +91,7 @@ export function useBoardRoom(token, roomCode) {
     emitDiff(current, next);
 
     history.future = history.future.slice(1);
-    history.past = [...history.past, current].slice(-HISTORY_LIMIT);
+    history.past = [...history.past, current];
     setCanUndo(true);
     setCanRedo(history.future.length > 0);
   }, [applyElements, emitDiff]);
