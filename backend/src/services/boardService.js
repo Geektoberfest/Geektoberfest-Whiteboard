@@ -18,7 +18,7 @@ export async function readBoard(roomId) {
 
   const stored = await Board.findOne({ room: roomId }).lean();
   if (stored?.elements?.length) {
-    return { elements: stored.elements.slice(1), source: 'database' };
+    return { elements: stored.elements, source: 'database' };
   }
 
   return { elements: [], source: 'empty' };
