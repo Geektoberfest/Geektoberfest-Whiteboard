@@ -49,6 +49,96 @@ describe('sanitizeElement', () => {
     assert.equal(sanitizeElement({ id: 'a', type: 'pen', points: [] }), null);
   });
 
+  it('preserves every point in a 501-point pen stroke', () => {
+    const points = Array.from({ length: 501 }, (_, index) => ({ x: index, y: index * 2 }));
+    const element = sanitizeElement({ id: 'pen-501', type: 'pen', points });
+
+    assert.equal(element.points.length, 501);
+    assert.deepEqual(element.points.at(-1), { x: 500, y: 1_000 });
+  });
+
+  it('preserves a 2,000-point pen stroke in order with its metadata', () => {
+    const points = Array.from({ length: 2_000 }, (_, index) => ({ x: index, y: index * 3 }));
+    const stroke = { id: 'long-pen', type: 'pen', color: '#2563eb', strokeWidth: 5, points };
+
+    const element = sanitizeElement(stroke);
+
+    assert.equal(element.points.length, points.length);
+    assert.deepEqual(element.points[0], points[0]);
+    assert.deepEqual(element.points[1_000], points[1_000]);
+    assert.deepEqual(element.points.at(-1), points.at(-1));
+    assert.equal(element.id, stroke.id);
+    assert.equal(element.color, stroke.color);
+    assert.equal(element.strokeWidth, stroke.strokeWidth);
+  });
+
+  it('preserves a pen stroke at the configured point cap', () => {
+    const points = Array.from({ length: 10_000 }, (_, index) => ({ x: index, y: index }));
+    const element = sanitizeElement({ id: 'pen-at-cap', type: 'pen', points });
+
+    assert.equal(element.points.length, 10_000);
+    assert.deepEqual(element.points.at(-1), { x: 9_999, y: 9_999 });
+  });
+
+  it('keeps the configured finite cap for oversized pen strokes', () => {
+    const points = Array.from({ length: 10_001 }, (_, index) => ({ x: index, y: index }));
+    const element = sanitizeElement({ id: 'oversized-pen', type: 'pen', points });
+
+    assert.equal(element.points.length, 10_000);
+    assert.deepEqual(element.points.at(-1), { x: 9_999, y: 9_999 });
+  });
+
+  it('filters invalid pen points and clamps valid out-of-range coordinates', () => {
+    const element = sanitizeElement({
+      id: 'mixed-pen',
+      type: 'pen',
+      points: [
+        { x: 1, y: 2 },
+        { x: Number.NaN, y: 3 },
+        { x: 4, y: Infinity },
+        { x: 'not-a-coordinate', y: 5 },
+        { x: 200_000, y: -200_000 },
+      ],
+    });
+
+    assert.deepEqual(element.points, [
+      { x: 1, y: 2 },
+      { x: 100_000, y: -100_000 },
+    ]);
+  });
+
+  it('rejects a pen stroke when every point is invalid', () => {
+    const element = sanitizeElement({
+      id: 'broken-pen',
+      type: 'pen',
+      points: [
+        { x: Number.NaN, y: 0 },
+        { x: 0, y: Infinity },
+        { x: 'nope', y: 'nope' },
+        null,
+      ],
+    });
+
+    assert.equal(element, null);
+  });
+
+  it('continues to sanitize non-pen element types', () => {
+    const elements = [
+      { id: 'line', type: 'line', x: 1, y: 2, x2: 3, y2: 4 },
+      { id: 'arrow', type: 'arrow', x: 1, y: 2, x2: 3, y2: 4 },
+      { id: 'rectangle', type: 'rectangle', x: 1, y: 2, width: 3, height: 4 },
+      { id: 'circle', type: 'circle', x: 1, y: 2, width: 3, height: 4 },
+      { id: 'text', type: 'text', x: 1, y: 2, width: 3, height: 4, text: 'Hello' },
+      { id: 'sticky', type: 'sticky', x: 1, y: 2, width: 3, height: 4, text: 'Note' },
+    ];
+
+    for (const input of elements) {
+      const element = sanitizeElement(input);
+      assert.equal(element.type, input.type);
+      assert.equal(element.id, input.id);
+    }
+  });
+
   it('rejects a non numeric coordinate', () => {
     assert.equal(sanitizeElement({ id: 'a', type: 'rectangle', x: 'left', y: 0 }), null);
   });
