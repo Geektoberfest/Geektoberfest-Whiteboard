@@ -30,7 +30,7 @@ function strokeArrow(ctx, element) {
     { x: element.x2, y: element.y2 },
   ]);
 
-  const angle = Math.atan2(element.y - element.y2, element.x - element.x2);
+  const angle = Math.atan2(element.y2 - element.y, element.x2 - element.x);
   const headLength = Math.max(10, element.strokeWidth * 3.5);
 
   ctx.beginPath();
