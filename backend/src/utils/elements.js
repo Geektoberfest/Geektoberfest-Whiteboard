@@ -5,7 +5,9 @@ const TYPES = new Set(['pen', 'line', 'arrow', 'rectangle', 'circle', 'text', 's
 const BOUND_TYPES = new Set(['rectangle', 'circle', 'text', 'sticky']);
 
 const MAX_COORDINATE = 100000;
-const MAX_POINTS = 500;
+// A completed freehand stroke is sent as one element. Keep a finite per-stroke
+// bound while allowing a long, continuous stroke to be retained intact.
+const MAX_PEN_POINTS = 10_000;
 const MAX_TEXT_LENGTH = 2000;
 const MAX_STROKE_WIDTH = 80;
 const MAX_ID_LENGTH = 64;
@@ -51,7 +53,7 @@ function toId(value) {
 function toPoints(value) {
   if (!Array.isArray(value) || value.length === 0) return null;
   const points = [];
-  for (const rawPoint of value.slice(0, MAX_POINTS)) {
+  for (const rawPoint of value.slice(0, MAX_PEN_POINTS)) {
     const x = toCoordinate(rawPoint?.x);
     const y = toCoordinate(rawPoint?.y);
     if (x === null || y === null) continue;
